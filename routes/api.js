@@ -9,11 +9,11 @@ module.exports = function (app) {
   app.route('/api/check')
     .post((req, res) => {
 
-      let {
-        puzzle,
-        coordinate,
-        value
-      } = res.body ; 
+    //   let {
+    //     puzzle,
+    //     coordinate,
+    //     value
+    //   } = res.body ; 
 
     });
     
@@ -35,7 +35,7 @@ module.exports = function (app) {
       res.json({ error: 'Expected puzzle to be 81 characters long' });
     }  
 
-      let solution = SudokuSolver.solve(puzzle);
+      let solution = solver.solve(puzzle);
     if (!solution) return res.json({ "error": "Puzzle cannot be solved" });
 
      res.json({ solution : solution}) ;
