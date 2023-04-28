@@ -1,13 +1,42 @@
 class SudokuSolver {
 
+  letterToNumber(letter){
+
+    let letter2 = letter.toLowerCase();
+    switch(letter2){
+      case 'a':
+       return 1; 
+      case 'b':
+       return 2;
+      case 'c':
+       return 3; 
+      case 'd':
+       return 4; 
+      case 'e':
+       return 5;
+      case 'f':
+       return 6; 
+      case 'g':
+       return 7; 
+      case 'h':
+       return 8;
+      case 'i':
+       return 9;   
+    }
+  }
+
   validate(puzzleString) {
   }
 
   checkRowPlacement(puzzleString, row, column, value) {
 
+    let grid = this.transform(puzzleString);
+     row = this.letterToNumber(row);
   }
 
   checkColPlacement(puzzleString, row, column, value) {
+     let grid = this.transform(puzzleString);
+   row = this.letterToNumber(row);
 
   }
 
@@ -15,7 +44,7 @@ class SudokuSolver {
 
   }
 
-  isSafe( grid, row,  col, num)
+  isSafe(grid, row,  col, num)
     {
   
         for (let x = 0; x <= 8; x++)
@@ -36,8 +65,6 @@ class SudokuSolver {
   
         return true;
     }
-
-
   transform(puzzleString) {
     let grid = [
       [0,0,0,0,0,0,0,0,0],
@@ -67,7 +94,6 @@ class SudokuSolver {
 
  solveSudoku(grid, row, col)
     {
-  
         if (row == 9 - 1 && col == 9)
             return grid;
 
@@ -77,15 +103,15 @@ class SudokuSolver {
         }
  
         if (grid[row][col] != 0)
-            return solveSudoku(grid, row, col + 1);
+            return this.solveSudoku(grid, row, col + 1);
   
         for (let num = 1; num < 10; num++) {
 
-            if (isSafe(grid, row, col, num)) {
+            if (this.isSafe(grid, row, col, num)) {
 
                 grid[row][col] = num;
 
-                if (solveSudoku(grid, row, col + 1))
+                if (this.solveSudoku(grid, row, col + 1))
                     return true;
             }
     
@@ -96,7 +122,8 @@ class SudokuSolver {
 
   transformBack(grid){
 
-    grid.flat().join('');
+    console.log(grid);
+    return grid.flat().join('');
   }
 
   solve(puzzleString) {
