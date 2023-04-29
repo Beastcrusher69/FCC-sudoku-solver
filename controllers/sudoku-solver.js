@@ -24,24 +24,80 @@ class SudokuSolver {
        return 9;   
     }
   }
+  
+  transform(puzzleString) {
+    let grid = [
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+      
+    ]
+
+    let c = 0 ; 
+
+    for(let i=0 ; i< 9 ; i++){
+      for (let j=0 ; j<9 ; j++){
+        grid[i][j] = puzzleString[c] === '.' ? 0 : +puzzleString[c];
+
+        c++ ;
+      }
+    }
+
+    return grid;
+  }
 
   validate(puzzleString) {
   }
 
-  checkRowPlacement(puzzleString, row, column, value) {
+  checkRowPlacement(puzzleString, row, col, value) {
 
     let grid = this.transform(puzzleString);
      row = this.letterToNumber(row);
+
+    for(let i=0 ; i<9 ; i++){
+      if(grid[row-1][i] === value){
+        return false ;
+      }
+    }
+    return true ;
   }
 
-  checkColPlacement(puzzleString, row, column, value) {
+  checkColPlacement(puzzleString, row, col, value) {
      let grid = this.transform(puzzleString);
-   row = this.letterToNumber(row);
 
+   for(let i=0 ;i<9 ; i++){
+     if( grid[i][col-1] === value){
+      return false ;
+    }
+   }
+    return true ; 
   }
 
-  checkRegionPlacement(puzzleString, row, column, value) {
+  checkRegionPlacement(puzzleString, row, col, value) {
+    let grid = this.transform(puzzleString);
+     row = this.letterToNumber(row);
 
+    if(grid[row-1][col-1] !== 0){
+      return false ;
+    
+    }
+    let startRow = row -(row % 3),
+        startCol = col- ( col % 3);
+
+    for( let i =0 ; i< 3 ; i++){
+      for (let j=0 ; j< 3 ; j++){
+        if(grid[i + startRow][j + startCol] == value) return false ;
+      }
+    }
+    return true ;
+    
+    
   }
 
   isSafe(grid, row,  col, num)
@@ -65,37 +121,11 @@ class SudokuSolver {
   
         return true;
     }
-  transform(puzzleString) {
-    let grid = [
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-      
-    ]
-
-    let i = 1 ; 
-
-    for(let i=0 ; i< 9 ; i++){
-      for (let j=0 ; j<9 ; j++){
-        grid[i][j] = puzzleString[i] === '.' ? 0 : +puzzleString[i];
-
-        i++ ;
-      }
-    }
-
-    return grid;
-  }
 
  solveSudoku(grid, row, col)
     {
         if (row == 9 - 1 && col == 9)
-            return grid;
+            return true;
 
         if (col == 9) {
             row++;
@@ -122,7 +152,6 @@ class SudokuSolver {
 
   transformBack(grid){
 
-    console.log(grid);
     return grid.flat().join('');
   }
 
@@ -131,13 +160,14 @@ class SudokuSolver {
     let grid = this.transform(puzzleString);
 
     let solved = this.solveSudoku(grid, 0, 0) ;
+    
+    
     if(!solved){
       return false ;
     }
 
-    let ans = this.transformBack(solved);
-    
-    return ans;
+    let solvedString = this.transformBack(grid);
+    return solvedString;
     
     }
   
