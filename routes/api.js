@@ -30,24 +30,28 @@ module.exports = function (app) {
     }  
 
       if(!puzzle || !coordinate || !value){
-        res.json({ "error": "Required field(s) missing" });
+        res.json({ error: 'Required field(s) missing' });
         return ;
         
       }
 
       let row = coordinate.split('')[0];
       let col = coordinate.split('')[1];
-      let rowRegex = /[a-z]/i ;
-      let colRegex = /[1-9]/  ;
+      let rowRegex = /[a-i]/i ;
+      let colRegex = /^[1-9]$/  ;
 
-      console.log(row);
-      console.log(col);
+      // console.log(row);
+      // console.log(col);
       
-      console.log(rowRegex.test(row));
-      console.log(colRegex.test(col));
+      // console.log(rowRegex.test(row));
+      // console.log(colRegex.test(col));
       
+      // console.log(validRow);
+      // console.log(validCol);
+      // console.log(validRegion);
 
-      if( !rowRegex.test(row) || !colRegex.test(col)){
+      
+      if(coordinate.length !== 2 || !rowRegex.test(row) || !colRegex.test(col)){
         res.json({ "error": "Invalid coordinate" });
         return ;
       }
@@ -61,24 +65,26 @@ module.exports = function (app) {
       let validCol = solver.checkColPlacement(puzzle, row, col, value);
       let validRegion = solver.checkRegionPlacement(puzzle, row, col, value);
 
+      
       if(validRow && validCol && validRegion){
         res.json({ valid : "true"});
+        return ;
       }
 
-      conflict = [];
+      let conflict = [];
       if(!validRow){
         conflict.push('row');
       }
 
       if(!validCol){
-        conflict.push('col');
+        conflict.push('column');
       }
       
       if(!validRegion){
         conflict.push('region');
       }
 
-      res,json({ valid : 'false' , conflict})
+      res.json({ valid : 'false' , conflict})
 
     });
     

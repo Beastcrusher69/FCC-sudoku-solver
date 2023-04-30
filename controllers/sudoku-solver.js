@@ -59,9 +59,10 @@ class SudokuSolver {
 
     let grid = this.transform(puzzleString);
      row = this.letterToNumber(row);
+    console.log("row:" + row)
 
     for(let i=0 ; i<9 ; i++){
-      if(grid[row-1][i] === value){
+      if(grid[row-1][i] == value){
         return false ;
       }
     }
@@ -72,7 +73,7 @@ class SudokuSolver {
      let grid = this.transform(puzzleString);
 
    for(let i=0 ;i<9 ; i++){
-     if( grid[i][col-1] === value){
+     if( grid[i][col-1] == value){
       return false ;
     }
    }
@@ -87,14 +88,36 @@ class SudokuSolver {
       return false ;
     
     }
-    let startRow = row -(row % 3),
-        startCol = col- ( col % 3);
 
-    for( let i =0 ; i< 3 ; i++){
-      for (let j=0 ; j< 3 ; j++){
-        if(grid[i + startRow][j + startCol] == value) return false ;
-      }
+    let startRow,
+        startCol ;
+    
+    if(row >= 1 && row <=3){
+      startRow= 0;
     }
+    else if (row >= 4 && row <=6){
+      startRow= 3;
+    }
+    else{
+      startRow= 6;
+    }
+
+    if(col >= 1 && col <=3){
+      startCol= 0;
+    }
+    else if (col >= 4 && col <=6){
+      startCol= 3;
+    }
+    else{
+      startCol= 6;
+      
+    }
+
+    for( let i =0 ; i< 3 ; i++)
+      for (let j=0 ; j< 3 ; j++)
+        if(grid[i + startRow][j + startCol] == value) return false ;
+      
+
     return true ;
     
     
